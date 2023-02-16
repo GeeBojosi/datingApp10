@@ -1,6 +1,7 @@
 using datingApp10.Data;
 using datingApp10.Extensions;
 using datingApp10.Interfaces;
+using datingApp10.Middleware;
 using datingApp10.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -44,14 +45,9 @@ namespace datingApp10
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "datingApp10 v1"));
-            }
+            app.UseMiddleware<ExceptionMiddleware>(); 
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
