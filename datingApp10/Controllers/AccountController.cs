@@ -55,6 +55,7 @@ namespace datingApp10.Controllers
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDto)
         {
             var user = await _context.Users
+                            .Include(x => x.Photos)
                             .SingleOrDefaultAsync(x => x.UserName == loginDto.Username);
 
             if (user == null) return Unauthorized("Invalid username");
@@ -63,16 +64,18 @@ namespace datingApp10.Controllers
 
             var computerHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
-            for(int i = 0; i < computerHash.Length; i++)
+            for (int i = 0; i < computerHash.Length; i++)
             {
                 if (computerHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
             }
 
-            return new UserDTO 
+            return new UserDTO
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
             };
+
         }
 
         private async Task<bool> UserExists(string username)
