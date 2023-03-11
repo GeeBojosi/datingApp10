@@ -1,5 +1,6 @@
 ﻿using datingApp10.DTOs;
 using datingApp10.Entities;
+using datingApp10.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace datingApp10.Interfaces
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserByIdAsync(int id);
         Task<AppUser> GetByUsernameAsync(string username);
-        Task<IEnumerable<MemberDto>> GetMembersAsync();
+        Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
         Task<MemberDto> GetMemberAsync(string username);
     }
 }
